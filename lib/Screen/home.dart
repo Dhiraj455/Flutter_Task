@@ -40,7 +40,6 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: null,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
@@ -72,7 +71,7 @@ class _HomeState extends State<Home> {
                 )
               ],
             ),
-            expandedHeight: 170.0,
+            expandedHeight: 210.0,
             flexibleSpace: ClipRRect(
                 borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(20),

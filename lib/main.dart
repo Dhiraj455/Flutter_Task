@@ -6,6 +6,12 @@ import 'package:flutter/services.dart';
 import 'package:task/Screen/home.dart';
 
 void main() {
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+    ),
+  );
+  // SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
   runApp(const MyApp());
 }
 
@@ -21,7 +27,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const SafeArea(top: false, child: Home()),
+      home: const SafeArea(top: true,child: Home(),),
     );
   }
 }
