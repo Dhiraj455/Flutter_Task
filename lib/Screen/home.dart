@@ -3,42 +3,24 @@ import 'dart:convert';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:task/Screen/home.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+import '../common_widgets/StarRating.dart';
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const Home(),
-    );
-  }
-}
-
-class CarouselApp extends StatefulWidget {
-  const CarouselApp({super.key});
+class Home extends StatefulWidget {
+  const Home({super.key});
 
   @override
-  State<CarouselApp> createState() => _CarouselAppState();
+  State<Home> createState() => _HomeState();
 }
 
-class _CarouselAppState extends State<CarouselApp> {
+class _HomeState extends State<Home> {
   var _imageList = [];
   var _bannerTitle = "";
   var _description = "";
   var _details = [];
   var popularTrek = [];
+  int _currentIndex = 0;
+  CarouselController _controller = CarouselController();
 
   Future<void> readJson() async {
     final String response = await rootBundle.loadString('assets/data.json');
@@ -71,12 +53,14 @@ class _CarouselAppState extends State<CarouselApp> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
+                  width: 35,
+                  height: 35,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(50),
                     color: Colors.white,
                   ),
                   child: const IconButton(
-                    icon: Icon(Icons.arrow_back, color: Colors.black),
+                    icon: Icon(Icons.arrow_back_ios_sharp, color: Colors.black),
                     onPressed: null,
                   ),
                 ),
@@ -108,19 +92,27 @@ class _CarouselAppState extends State<CarouselApp> {
                       autoPlayAnimationDuration:
                           const Duration(milliseconds: 800),
                       viewportFraction: 1.0,
+                      onPageChanged: (index, reason) {
+                        setState(() {
+                          _currentIndex = index;
+                        });
+                      },
                     ),
+                    carouselController: _controller,
                     items: _imageList.map((imageUrl) {
                       return Builder(
                         builder: (BuildContext context) {
-                          return Container(
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: NetworkImage(imageUrl),
-                                  fit: BoxFit.cover,
+                          return Stack(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: NetworkImage(imageUrl),
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
                               ),
-                              child: Align(
+                              Align(
                                 alignment: Alignment.bottomLeft,
                                 child: Padding(
                                   padding: const EdgeInsets.all(20),
@@ -137,7 +129,32 @@ class _CarouselAppState extends State<CarouselApp> {
                                     ),
                                   ),
                                 ),
-                              ));
+                              ),
+                              Positioned(
+                                bottom: 10.0,
+                                left: 0.0,
+                                right: 0.0,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: _imageList.map((url) {
+                                    int index = _imageList.indexOf(url);
+                                    return Container(
+                                        width: 20,
+                                        height: 4,
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 5.0),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(50),
+                                          color: _currentIndex == index
+                                              ? Colors.white
+                                              : Colors.white.withOpacity(0.5),
+                                        ));
+                                  }).toList(),
+                                ),
+                              ),
+                            ],
+                          );
                         },
                       );
                     }).toList(),
@@ -274,44 +291,6 @@ class _CarouselAppState extends State<CarouselApp> {
           ),
         ],
       ),
-    );
-  }
-}
-
-class StarRating extends StatefulWidget {
-  final int starCount;
-  final double rating;
-  final Color color;
-  final double size;
-
-  const StarRating(
-      {super.key,
-      this.starCount = 5,
-      this.rating = .0,
-      required this.color,
-      this.size = 24});
-
-  @override
-  // ignore: library_private_types_in_public_api
-  _StarRatingState createState() => _StarRatingState();
-}
-
-class _StarRatingState extends State<StarRating> {
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: List.generate(widget.starCount, (index) {
-        return Icon(
-          index < widget.rating.floor()
-              ? Icons.star
-              : index < widget.rating.ceil()
-                  ? Icons.star_half
-                  : Icons.star_outline,
-          color: widget.color,
-          size: widget.size,
-        );
-      }),
     );
   }
 }
