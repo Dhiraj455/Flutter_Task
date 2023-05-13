@@ -1,11 +1,14 @@
-# task
+# Travel Expert
 
-Travel Expert
 
-<!-- Add Images to the Readme page -->
-![alt text](./assets/images/image3.jpeg)
-![alt text](./assets/images/image1.jpeg)
-![alt text](./assets/images/image2.jpeg)
+## Images
+<img src="./assets/images/image3.jpeg" width="200" height="400" /> <img src="./assets/images/image1.jpeg" width="200" height="400" /> <img src="./assets/images/image2.jpeg" width="200" height="400" />
+
+## Video
+https://github.com/Dhiraj455/Flutter_Task/assets/66423114/a263543e-904b-4db9-9d46-35f60f707d7f
+
+
+
 
 ## Getting Started
 
